@@ -8,18 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
+    let emojis = ["👻", "🎃", "🕷️", "😈", "💀"]
+    
     var body: some View {
         VStack {
-            CardView()
-            CardView()
-            CardView()
-            CardView()
+            ForEach(emojis.indices, id: \.self) { index in
+                CardView(content: emojis[index])
+            }
         }
         .padding()
     }
 }
 
 struct CardView: View {
+    let content: String
     @State var isOpened = false
     
     var body: some View {
@@ -31,7 +33,7 @@ struct CardView: View {
                     .onTapGesture {
                         isOpened.toggle()
                     }
-                Text("👻").font(.largeTitle)
+                Text(content).font(.largeTitle)
             } else {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(.pink)
