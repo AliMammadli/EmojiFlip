@@ -7,15 +7,39 @@
 
 import SwiftUI
 
-struct ContentView: View {  
+struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            CardView()
+            CardView()
+            CardView()
+            CardView()
         }
         .padding()
+    }
+}
+
+struct CardView: View {
+    @State var isOpened = false
+    
+    var body: some View {
+        ZStack {
+            if isOpened {
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(lineWidth: 5)
+                    .foregroundColor(.pink)
+                    .onTapGesture {
+                        isOpened.toggle()
+                    }
+                Text("👻").font(.largeTitle)
+            } else {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(.pink)
+                    .onTapGesture {
+                        isOpened.toggle()
+                    }
+            }
+        }
     }
 }
 
