@@ -8,32 +8,38 @@
 import SwiftUI
 
 struct EmojiFlipGameView: View {
-    let emojis = ["👻", "🎃", "🕷️", "😈", "💀", "🕸️", "🧙🏻‍♀️", "🙀", "👹", "😱", "☠️", "🍭"]
+    @ObservedObject var viewModel: EmojiFlipGameVM
     
     var body: some View {
         VStack {
             ScrollView {
                 cards
+                    .animation(.default, value: viewModel.cards)
             }
-            .font(.largeTitle)
-            .padding()
+            Button("Shuffle") {
+                viewModel.shuffle()
+            }
         }
         .padding()
     }
     
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 85))]) {
-            ForEach(emojis.indices, id: \.self) { index in
-                CardView(content: emojis[index])
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 85), spacing: 0)], spacing: 0) {
+            ForEach(viewModel.cards) { card in
+                CardView(card)
                     .aspectRatio(2/3, contentMode: .fit)
+                    .padding(4)
             }
         }
     }
 }
 
 struct CardView: View {
-    let content: String
-    @State var isFacedUp = false
+    let card: EmojiFlipGameM<String>.Card
+    
+    init(_ card: EmojiFlipGameM<String>.Card) {
+        self.card = card
+    }
     
     var body: some View {
         ZStack {
@@ -42,22 +48,19 @@ struct CardView: View {
                     .fill(.white)
                     .strokeBorder(lineWidth: 2)
                     .foregroundColor(.pink)
-                    .onTapGesture {
-                        isFacedUp.toggle()
-                    }
-                Text(content).font(.largeTitle)
+                Text(card.content)
+                    .font(.system(size: 200))
+                    .minimumScaleFactor(0.01)
+                    .aspectRatio(1, contentMode: .fit)
             }
-            .opacity(isFacedUp ? 1 : 0)
+            .opacity(card.isFacedUp ? 1 : 0)
             RoundedRectangle(cornerRadius: 12)
                 .fill(.pink)
-                .opacity(isFacedUp ? 0 : 1)
-                .onTapGesture {
-                    isFacedUp.toggle()
-                }
+                .opacity(card.isFacedUp ? 0 : 1)
         }
     }
 }
 
 #Preview {
-    EmojiFlipGameView()
+    EmojiFlipGameView(viewModel: EmojiFlipGameVM())
 }
