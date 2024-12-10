@@ -11,7 +11,7 @@ class EmojiFlipGameVM: ObservableObject {
     private static let emojis = ["👻", "🎃", "🕷️", "😈", "💀", "🕸️", "🧙🏻‍♀️", "🙀", "👹", "😱", "☠️", "🍭"]
     
     private static func createEmojiFlipGame() -> EmojiFlipGameM<String> {
-        return EmojiFlipGameM(numberOfPairsOfCards: 12) { pairIndex in
+        return EmojiFlipGameM(numberOfPairsOfCards: 10) { pairIndex in
             if emojis.indices.contains(pairIndex) {
                 return emojis[pairIndex]
             } else {
