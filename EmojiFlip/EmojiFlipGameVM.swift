@@ -8,6 +8,8 @@
 import SwiftUI
 
 class EmojiFlipGameVM: ObservableObject {
+    typealias Card = EmojiFlipGameM<String>.Card
+    
     private static let emojis = ["👻", "🎃", "🕷️", "😈", "💀", "🕸️", "🧙🏻‍♀️", "🙀", "👹", "😱", "☠️", "🍭"]
     
     private static func createEmojiFlipGame() -> EmojiFlipGameM<String> {
@@ -22,8 +24,12 @@ class EmojiFlipGameVM: ObservableObject {
     
     @Published private var model = createEmojiFlipGame()
     
-    var cards: Array<EmojiFlipGameM<String>.Card> {
-        return model.cards
+    var cards: Array<Card> {
+        model.cards
+    }
+    
+    var color: Color {
+        .orange
     }
     
     // MARK: - Intents
@@ -32,7 +38,7 @@ class EmojiFlipGameVM: ObservableObject {
         model.shuffle()
     }
     
-    func choose(_ card: EmojiFlipGameM<String>.Card) {
+    func choose(_ card: Card) {
         model.choose(card)
     }
 }
