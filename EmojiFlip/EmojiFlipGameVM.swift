@@ -32,6 +32,10 @@ class EmojiFlipGameVM: ObservableObject {
         .orange
     }
     
+    var score: Int {
+        model.score
+    }
+    
     // MARK: - Intents
     
     func shuffle() {

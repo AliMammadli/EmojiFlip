@@ -7,8 +7,19 @@
 
 import SwiftUI
 
-struct Cardify: ViewModifier {
-    let isFacedUp: Bool
+struct Cardify: ViewModifier, Animatable {
+    init(isFacedUp: Bool) {
+        rotation = isFacedUp ? 0 : 180
+    }
+    
+    var isFacedUp: Bool { rotation < 90 }
+    
+    var rotation: Double
+    
+    var animatableData: Double {
+        get { rotation }
+        set { rotation = newValue }
+    }
     
     func body(content: Content) -> some View {
         ZStack {
@@ -20,6 +31,7 @@ struct Cardify: ViewModifier {
                 .opacity(isFacedUp ? 1 : 0)
             base.opacity(isFacedUp ? 0 : 1)
         }
+        .rotation3DEffect(.degrees(rotation), axis: (0, 1, 0))
     }
     
     private struct Constants {

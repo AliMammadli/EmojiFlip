@@ -17,19 +17,29 @@ struct CardView: View {
     }
     
     var body: some View {
-        Pie(endAngle: .degrees(240))
-            .opacity(Constants.Pie.opacity)
-            .overlay(
-                Text(card.content)
-                    .font(.system(size: Constants.FontSize.largest))
-                    .minimumScaleFactor(Constants.FontSize.scaleFactor)
-                    .multilineTextAlignment(.center)
-                    .aspectRatio(1, contentMode: .fit)
-                    .padding(Constants.Pie.inset)
-            )
-            .padding(Constants.inset)
-            .modifier(Cardify(isFacedUp: card.isFacedUp))
-            .opacity(card.isMatched ? 0 : 1)
+        TimelineView(.animation) { timeline in
+            if card.isFacedUp || !card.isMatched {
+                Pie(endAngle: .degrees(card.bonusPercentRemaining * 360))
+                    .opacity(Constants.Pie.opacity)
+                    .overlay(cardContent.padding(Constants.Pie.inset))
+                    .padding(Constants.inset)
+                    .cardify(isFacedUp: card.isFacedUp)
+                    .transition(.scale)
+                //                .opacity(card.isMatched ? 0 : 1)
+            } else {
+                Color.clear
+            }
+        }
+    }
+    
+    var cardContent: some View {
+        Text(card.content)
+            .font(.system(size: Constants.FontSize.largest))
+            .minimumScaleFactor(Constants.FontSize.scaleFactor)
+            .multilineTextAlignment(.center)
+            .aspectRatio(1, contentMode: .fit)
+            .rotationEffect(.degrees(card.isMatched ? 360 : 0))
+            .animation(.spin(duration: 1), value: card.isMatched)
     }
     
     private struct Constants {
@@ -45,6 +55,12 @@ struct CardView: View {
             static let opacity: CGFloat = 0.4
             static let inset: CGFloat = 5
         }
+    }
+}
+
+extension Animation {
+    static func spin(duration: TimeInterval) -> Animation {
+        .linear(duration: duration).repeatForever(autoreverses: false)
     }
 }
 
